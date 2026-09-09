@@ -7,6 +7,11 @@
 #include <variant>
 #include <vector>
 
+/**
+ * @class HtmlNode
+ * @brief Represents an html node
+ *
+ */
 class HtmlNode {
    public:
     // ------------------------------------------------------------------------

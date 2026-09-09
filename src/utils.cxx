@@ -65,7 +65,7 @@ auto throwWhenEof(std::istream& is) -> void {
     if (!is.eof())
         return;
 
-    throw ParseError("unexpected end of file at position {}", (int)is.tellg());
+    throw ParseError("unexpected end of file");
 }
 
 auto throwWhenNot(std::istream& is, char ch) -> void {

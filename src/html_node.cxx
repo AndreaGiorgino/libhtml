@@ -7,6 +7,9 @@ HtmlNode::HtmlNode(std::string_view tagName) noexcept : _tagName(tagName) {};
 
 auto HtmlNode::decode(std::istream& is) -> HtmlNode {
     utils::throwWhenNot(is, '<');
+
+    const auto start {is.tellg()};
+
     is.ignore();
     utils::skipws(is);
 
@@ -59,8 +62,11 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
         is.ignore();
 
         while (!is.eof()) {
-            utils::skipws(is);
-            utils::throwWhenEof(is);
+            utils::skipwsAndComments(is);
+
+            if (is.eof())
+                throw ParseError("unclosed tag '{}' opened at position {}",
+                                 tagName, (int)start);
 
             if (is.peek() == '<') {
                 is.ignore();
@@ -71,8 +77,10 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
                     utils::skipws(is);
 
                     for (size i {}; i < tagName.size(); i++) {
-                        utils::throwWhenNot(is, tagName[i]);
-                        is.ignore();
+                        if (is.get() != tagName[i])
+                            throw ParseError(
+                                "unclosed tag '{}' opened at position {}",
+                                tagName, (int)start);
                     }
 
                     utils::skipws(is);
@@ -91,7 +99,6 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
                     utils::getUntil(is, [](auto ch) { return ch == '<'; })));
             }
         }
-
     } else if (is.peek() == '/') {
         is.ignore();
         utils::throwWhenNot(is, '>');

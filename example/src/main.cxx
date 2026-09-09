@@ -3,7 +3,10 @@
 
 auto main(int, char**) -> int {
     static constexpr auto raw {
-        R"(<div id="container" data-active><span>Content</span></div>)"};
+        R"(<div id="container" data-active>
+            <!-- comment -->
+            <span>Content</span>
+        </div>)"};
 
     std::println("Parsing node:");
     std::println("{}\n", raw);
