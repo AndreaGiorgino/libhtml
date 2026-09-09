@@ -5,6 +5,110 @@
 
 HtmlNode::HtmlNode(std::string_view tagName) noexcept : _tagName(tagName) {};
 
+auto HtmlNode::decode(std::istream& is) -> HtmlNode {
+    utils::throwWhenNot(is, '<');
+    is.ignore();
+    utils::skipws(is);
+
+    if (is.peek() == '/') {
+        // self closing, unnamed tag
+        is.ignore();
+        utils::throwWhenNot(is, '>');
+
+        return {};
+    }
+
+    const auto tagName {
+        utils::getUntil(is, [](char ch) { return !isalnum(ch) && ch != '-'; })};
+
+    HtmlNode node {tagName};
+
+    while (!is.eof()) {
+        utils::skipws(is);
+
+        if (!isalnum(is.peek()))
+            break;
+
+        // parse property name
+        const auto propName {utils::getUntil(
+            is, [](char ch) { return !isalnum(ch) && ch != '-'; })};
+
+        utils::skipws(is);
+
+        if (is.peek() != '=') {
+            node.prop(propName, "true");
+            continue;
+        }
+
+        // parse property value
+        is.ignore();
+        utils::skipws(is);
+        utils::throwWhenNot(is, '"');
+        is.ignore();
+
+        const auto propValue {
+            utils::getUntil(is, [](char ch) { return ch == '"'; })};
+
+        utils::throwWhenNot(is, '"');
+        is.ignore();
+
+        node.prop(propName, propValue);
+    }
+
+    if (is.peek() == '>') {
+        is.ignore();
+
+        while (!is.eof()) {
+            utils::skipws(is);
+            utils::throwWhenEof(is);
+
+            if (is.peek() == '<') {
+                is.ignore();
+
+                if (is.peek() == '/') {
+                    // parse close tag
+                    is.ignore();
+                    utils::skipws(is);
+
+                    for (size i {}; i < tagName.size(); i++) {
+                        utils::throwWhenNot(is, tagName[i]);
+                        is.ignore();
+                    }
+
+                    utils::skipws(is);
+                    utils::throwWhenNot(is, '>');
+                    is.ignore();
+
+                    break;
+                }
+
+                // parse child node
+                is.seekg((int)is.tellg() - 1);
+                node.addChild(HtmlNode::decode(is));
+            } else {
+                // parse text content
+                node.addChild(utils::trim(
+                    utils::getUntil(is, [](auto ch) { return ch == '<'; })));
+            }
+        }
+
+    } else if (is.peek() == '/') {
+        is.ignore();
+        utils::throwWhenNot(is, '>');
+    } else
+        throw ParseError("unexpected character '{}' at position {}",
+                         (char)is.peek(), (int)is.tellg());
+
+    return node;
+}
+
+auto HtmlNode::decode(std::string_view raw) -> HtmlNode {
+    std::stringstream ss {};
+    ss << raw;
+
+    return HtmlNode::decode(ss);
+}
+
 auto HtmlNode::propsSize(void) const noexcept -> std::size_t {
     return _props.size();
 }
@@ -67,4 +171,49 @@ auto HtmlNode::clearChildren(void) noexcept -> void {
 
 auto HtmlNode::encode(size indent) const noexcept -> std::string {
     return _encodeRecursive(*this, indent, 0);
+}
+
+auto _encodeRecursive(const HtmlNode& node, size indent, size depth) noexcept
+    -> std::string {
+    std::stringstream ss {};
+
+    utils::indent(ss, indent * depth);
+    ss << "<" << node._tagName << " ";
+
+    for (const auto& [k, v] : node._props)
+        ss << k << "=\"" << v << "\" ";
+
+    // pop trailing space
+    ss.seekp((int)ss.tellp() - 1);
+    ss << ">";
+
+    if (indent != 0)
+        ss << std::endl;
+
+    for (const auto& child : node._children)
+        std::visit(
+            [&](const auto& child) {
+                using base = std::remove_cvref_t<decltype(child)>;
+
+                if constexpr (std::is_same_v<base, std::string>) {
+                    // encode string content
+                    utils::indent(ss, indent * (depth + 1));
+                    ss << child;
+
+                    if (indent != 0)
+                        ss << std::endl;
+                } else {
+                    // encode child node
+                    ss << _encodeRecursive(child, indent, depth + 1);
+
+                    if (indent != 0)
+                        ss << std::endl;
+                }
+            },
+            child);
+
+    utils::indent(ss, indent * depth);
+    ss << "</" << node._tagName << ">";
+
+    return ss.str();
 }
