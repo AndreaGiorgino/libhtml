@@ -18,7 +18,53 @@ HtmlDoc::HtmlDoc(HtmlNode head, HtmlNode body) : _head(head), _body(body) {
 }
 
 auto HtmlDoc::decode(std::istream& is) -> HtmlDoc {
-    return {}; // FIXME: parse data
+    utils::ignorewsAndComments(is);
+
+    // parse preamble
+    static constexpr auto preamble {"<!doctype html>"};
+
+    for (size i {}; i < strlen(preamble); i++) {
+        utils::throwWhenEof(is);
+        utils::throwWhenNot(is, tolower(preamble[i]));
+
+        if (isspace(is.peek()))
+            utils::ignorews(is);
+        else
+            is.ignore();
+    }
+
+    // parse top level node
+    utils::ignorewsAndComments(is);
+
+    const auto root {HtmlNode::decode(is)};
+
+    if (root.tagName() != "html")
+        throw DocError(
+            "document root node must be an 'html' tag (got '{}' instead)",
+            root.tagName());
+
+    const auto head {std::get<HtmlNode>(root.child(0))};
+
+    if (head.tagName() != "head")
+        throw DocError(
+            "'html' first child must be an 'head' tag (got '{}' instead)",
+            head.tagName());
+
+    const auto body {std::get<HtmlNode>(root.child(0))};
+
+    if (body.tagName() != "body")
+        throw DocError(
+            "'html' second child must be a 'body' tag (got '{}' instead)",
+            body.tagName());
+
+    // handle remainder
+    utils::ignorewsAndComments(is);
+
+    if (!is.eof())
+        throw DocError("unexpected trailing character(s) at position {}",
+                       (int)is.tellg());
+
+    return {head, body};
 }
 
 auto HtmlDoc::decode(std::string_view raw) -> HtmlDoc {
