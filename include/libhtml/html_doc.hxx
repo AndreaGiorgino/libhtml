@@ -17,24 +17,6 @@ class HtmlDoc final {
     // ------------------------------------------------------------------------
     HtmlDoc(HtmlNode head = {"head"}, HtmlNode body = {"body"});
 
-    /**
-     * @brief Decode an html document from stream
-     *
-     * @param is The input stream
-     *
-     * @throws libhtml::ParseError When any parsing error has occured
-     */
-    [[nodiscard]] static auto decode(std::istream& is) -> HtmlDoc;
-
-    /**
-     * @brief Decode an html document from string
-     *
-     * @param raw The input string
-     *
-     * @throws libhtml::ParseError When any parsing error has occured
-     */
-    [[nodiscard]] static auto decode(std::string_view raw) -> HtmlDoc;
-
     // ------------------------------------------------------------------------
     // Copy
     // ------------------------------------------------------------------------
@@ -104,19 +86,47 @@ class HtmlDoc final {
         -> HtmlDoc&;
 
     /**
-     * @brief Get the document head
+     * @brief Clear the properties map
+     */
+    auto clearProps(void) noexcept -> void;
+
+    /**
+     * @brief Set the document head
      */
     auto head(HtmlNode head) -> void;
 
     /**
-     * @brief Get the document body
+     * @brief Set the document body
      */
     auto body(HtmlNode head) -> void;
 
     // ------------------------------------------------------------------------
-    // Print
+    // IO interface
     // ------------------------------------------------------------------------
 
+    /**
+     * @brief Decode an html document from stream
+     *
+     * @param is The input stream
+     *
+     * @throws libhtml::ParseError When any parsing error has occured
+     */
+    [[nodiscard]] static auto decode(std::istream& is) -> HtmlDoc;
+
+    /**
+     * @brief Decode an html document from string
+     *
+     * @param raw The input string
+     *
+     * @throws libhtml::ParseError When any parsing error has occured
+     */
+    [[nodiscard]] static auto decode(std::string_view raw) -> HtmlDoc;
+
+    /**
+     * @brief Encode the document
+     *
+     * @param indent The indentation to apply
+     */
     [[nodiscard]] auto encode(std::size_t indent = 4) const noexcept
         -> std::string;
 

@@ -19,24 +19,6 @@ class HtmlNode {
     // ------------------------------------------------------------------------
     HtmlNode(std::string_view tagName = "div") noexcept;
 
-    /**
-     * @brief Decode an html node from stream
-     *
-     * @param is The input stream
-     *
-     * @throws libhtml::ParseError When any parsing error has occured
-     */
-    [[nodiscard]] static auto decode(std::istream& is) -> HtmlNode;
-
-    /**
-     * @brief Decode an html node from string
-     *
-     * @param raw The input string
-     *
-     * @throws libhtml::ParseError When any parsing error has occured
-     */
-    [[nodiscard]] static auto decode(std::string_view raw) -> HtmlNode;
-
     // ------------------------------------------------------------------------
     // Copy
     // ------------------------------------------------------------------------
@@ -147,8 +129,26 @@ class HtmlNode {
     auto clearChildren(void) noexcept -> void;
 
     // ------------------------------------------------------------------------
-    // Print
+    // IO interface
     // ------------------------------------------------------------------------
+
+    /**
+     * @brief Decode an html node from stream
+     *
+     * @param is The input stream
+     *
+     * @throws libhtml::ParseError When any parsing error has occured
+     */
+    [[nodiscard]] static auto decode(std::istream& is) -> HtmlNode;
+
+    /**
+     * @brief Decode an html node from string
+     *
+     * @param raw The input string
+     *
+     * @throws libhtml::ParseError When any parsing error has occured
+     */
+    [[nodiscard]] static auto decode(std::string_view raw) -> HtmlNode;
 
     /**
      * @brief Encode the node

@@ -112,6 +112,10 @@ auto HtmlDoc::prop(std::string_view name, std::string_view value) noexcept
     return *this;
 }
 
+auto HtmlDoc::clearProps(void) noexcept -> void {
+    _props.clear();
+}
+
 auto HtmlDoc::head(HtmlNode head) -> void {
     if (head.tagName() != "head")
         throw DocError(
