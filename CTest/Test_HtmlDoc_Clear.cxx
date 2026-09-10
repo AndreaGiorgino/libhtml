@@ -1,4 +1,5 @@
 #include <libhtml/html_doc.hxx>
+#include <format>
 
 auto Test_HtmlDoc_Clear(int, char**) -> int {
     HtmlDoc doc {};

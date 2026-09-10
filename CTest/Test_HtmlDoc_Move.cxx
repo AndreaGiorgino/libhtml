@@ -1,4 +1,5 @@
 #include <libhtml/html_doc.hxx>
+#include <format>
 
 auto Test_HtmlDoc_Move(int, char**) -> int {
     HtmlDoc doc {};

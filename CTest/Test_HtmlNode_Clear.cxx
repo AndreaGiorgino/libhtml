@@ -1,4 +1,5 @@
 #include <libhtml/html_node.hxx>
+#include <format>
 
 auto Test_HtmlNode_Clear(int, char**) -> int {
     HtmlNode node {"span"};

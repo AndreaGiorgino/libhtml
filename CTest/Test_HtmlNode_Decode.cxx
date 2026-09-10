@@ -1,4 +1,5 @@
 #include <libhtml/html_node.hxx>
+#include <format>
 #include <sstream>
 
 auto Test_HtmlNode_Decode(int, char**) -> int {

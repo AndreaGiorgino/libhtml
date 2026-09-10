@@ -1,3 +1,4 @@
+#include <format>
 #include <libhtml/html_node.hxx>
 
 auto Test_HtmlNode_Copy(int, char**) -> int {
