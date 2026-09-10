@@ -138,7 +138,7 @@ auto HtmlDoc::encode(std::size_t indent) const noexcept -> std::string {
     if (indent != 0)
         ss << std::endl;
 
-    HtmlNode buffer {"head"};
+    HtmlNode buffer {"html"};
 
     for (const auto& [k, v] : _props)
         buffer.prop(k, v);
