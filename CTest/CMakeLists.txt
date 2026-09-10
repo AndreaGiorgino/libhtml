@@ -16,6 +16,7 @@ set(
     Test_HtmlNode_Clear.cxx
 
     Test_HtmlNode_Decode.cxx
+    Test_HtmlNode_Encode.cxx
 )
 
 create_test_sourcelist(
