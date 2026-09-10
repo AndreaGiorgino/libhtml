@@ -67,7 +67,7 @@ auto Test_HtmlNode_Decode(int, char**) -> int {
                     __LINE__, expected, nested.propsSize()));
             else if (const auto expected {1}; nested.childrenSize() != expected)
                 throw std::runtime_error(std::format(
-                    "{}:{}: expected {} nestedren (got '{}')", __FILE__,
+                    "{}:{}: expected {} children (got '{}')", __FILE__,
                     __LINE__, expected, nested.childrenSize()));
 
             {
@@ -106,7 +106,7 @@ auto Test_HtmlNode_Decode(int, char**) -> int {
                     __LINE__, expected, nested.propsSize()));
             else if (const auto expected {1}; nested.childrenSize() != expected)
                 throw std::runtime_error(std::format(
-                    "{}:{}: expected {} nestedren (got '{}')", __FILE__,
+                    "{}:{}: expected {} children (got '{}')", __FILE__,
                     __LINE__, expected, nested.childrenSize()));
 
             {
@@ -168,8 +168,6 @@ auto Test_HtmlNode_Decode(int, char**) -> int {
                             __LINE__, expected, child.childrenSize()));
 
         //// test properties
-        const auto props {child.props()};
-
         if (const auto name {"src"}, expected {"test.jpg"};
             child.prop(name) != expected)
             throw std::runtime_error(std::format(

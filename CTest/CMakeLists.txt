@@ -8,13 +8,13 @@ set(
     SOURCE_FILES
 
     # HtmlNode
+    ## indirectly testing get/set methods
     Test_HtmlNode_Ctor.cxx
-
-    Test_HtmlNode_Capacity.cxx
-
     Test_HtmlNode_Copy.cxx
     Test_HtmlNode_Move.cxx
-    
+
+    Test_HtmlNode_Clear.cxx
+
     Test_HtmlNode_Decode.cxx
 )
 
