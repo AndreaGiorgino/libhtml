@@ -3,25 +3,12 @@
 #include <libhtml/parse_error.hxx>
 
 namespace utils {
-auto trim(std::string_view str) noexcept -> std::string {
-    if (str.empty())
-        return {};
-
-    return {
-        std::find_if(str.begin(), str.end(),
-                     [](char ch) { return !isspace(ch); }),
-        std::find_if(str.rbegin(), str.rend(),
-                     [](char ch) { return !isspace(ch); })
-            .base(),
-    };
-}
-
-auto skipws(std::istream& is) noexcept -> void {
+auto ignorews(std::istream& is) noexcept -> void {
     while (isspace(is.peek()))
         is.ignore();
 }
 
-auto skipwsAndComments(std::istream& is) -> void {
+auto ignorewsAndComments(std::istream& is) -> void {
     while (!is.eof()) {
         if (isspace(is.peek())) {
             // handle whitespace

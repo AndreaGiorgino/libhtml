@@ -9,27 +9,20 @@ using size = std::size_t;
 
 namespace utils {
 /**
- * @brief Trim a string
- *
- * @param str The input string
- */
-[[nodiscard]] auto trim(std::string_view str) noexcept -> std::string;
-
-/**
- * @brief Skip whitespaces in stream
+ * @brief ignore whitespaces in stream
  *
  * @param is The input stream
  */
-auto skipws(std::istream& is) noexcept -> void;
+auto ignorews(std::istream& is) noexcept -> void;
 
 /**
- * @brief Skip whitespaces and comments in stream
+ * @brief ignore whitespaces and comments in stream
  *
  * @param is The input stream
  *
  * @throws libhtml::ParseError When an unclosed comment is found
  */
-auto skipwsAndComments(std::istream& is) -> void;
+auto ignorewsAndComments(std::istream& is) -> void;
 
 /**
  * @brief Throws when the stream has reached EOF

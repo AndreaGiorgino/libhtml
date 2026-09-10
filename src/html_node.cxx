@@ -11,7 +11,7 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
     const auto start {is.tellg()};
 
     is.ignore();
-    utils::skipws(is);
+    utils::ignorews(is);
 
     if (is.peek() == '/') {
         // self closing, unnamed tag
@@ -28,7 +28,7 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
     HtmlNode node {tagName};
 
     while (!is.eof()) {
-        utils::skipws(is);
+        utils::ignorews(is);
 
         if (!isalnum(is.peek()))
             break;
@@ -37,7 +37,7 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
         const auto propName {utils::getUntil(
             is, [](char ch) { return !isalnum(ch) && ch != '-'; })};
 
-        utils::skipws(is);
+        utils::ignorews(is);
 
         if (is.peek() != '=') {
             node.prop(propName, propName);
@@ -46,7 +46,7 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
 
         // parse property value
         is.ignore();
-        utils::skipws(is);
+        utils::ignorews(is);
         utils::throwWhenNot(is, '"');
         is.ignore();
 
@@ -60,10 +60,11 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
     }
 
     if (is.peek() == '>') {
+        // parse contents
         is.ignore();
 
         while (!is.eof()) {
-            utils::skipwsAndComments(is);
+            utils::ignorewsAndComments(is);
 
             if (is.eof())
                 throw ParseError("unclosed tag '{}' opened at position {}",
@@ -75,7 +76,7 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
                 if (is.peek() == '/') {
                     // parse close tag
                     is.ignore();
-                    utils::skipws(is);
+                    utils::ignorews(is);
 
                     for (size i {}; i < tagName.size(); i++) {
                         if (is.get() != tagName[i])
@@ -84,7 +85,7 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
                                 tagName, (int)start);
                     }
 
-                    utils::skipws(is);
+                    utils::ignorews(is);
                     utils::throwWhenNot(is, '>');
                     is.ignore();
 
