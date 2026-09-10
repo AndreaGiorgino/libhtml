@@ -116,7 +116,7 @@ class HtmlNode {
     auto clearProps(void) noexcept -> void;
 
     /**
-     * @brief Add a node to the children collection
+     * @brief Add a child node and return self
      *
      * @param node The node to add
      */

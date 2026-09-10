@@ -6,7 +6,7 @@
 
 /**
  * @class DocError
- * @brief Represents a parsing error
+ * @brief Represents a document error
  *
  */
 class DocError final : public std::runtime_error {
