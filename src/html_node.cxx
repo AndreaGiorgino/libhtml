@@ -17,6 +17,7 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
         // self closing, unnamed tag
         is.ignore();
         utils::throwWhenNot(is, '>');
+        is.ignore();
 
         return {};
     }
@@ -39,7 +40,7 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
         utils::skipws(is);
 
         if (is.peek() != '=') {
-            node.prop(propName, "true");
+            node.prop(propName, propName);
             continue;
         }
 
@@ -102,6 +103,7 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
     } else if (is.peek() == '/') {
         is.ignore();
         utils::throwWhenNot(is, '>');
+        is.ignore();
     } else
         throw ParseError("unexpected character '{}' at position {}",
                          (char)is.peek(), (int)is.tellg());
