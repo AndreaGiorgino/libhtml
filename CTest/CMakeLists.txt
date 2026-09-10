@@ -22,6 +22,7 @@ set(
     ## indirectly testing get/set methods
     Test_HtmlDoc_Ctor.cxx
     Test_HtmlDoc_Copy.cxx
+    Test_HtmlDoc_Move.cxx
 )
 
 create_test_sourcelist(
