@@ -96,9 +96,17 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
                 is.seekg((int)is.tellg() - 1);
                 node.addChild(HtmlNode::decode(is));
             } else {
+                std::string content {};
+
+                is.seekg((int)is.tellg() - 1);
+                if (isspace(is.get()))
+                    content += " ";
+
+                content
+                    += utils::getUntil(is, [](auto ch) { return ch == '<'; });
+
                 // parse text content
-                node.addChild(utils::trim(
-                    utils::getUntil(is, [](auto ch) { return ch == '<'; })));
+                node.addChild(content);
             }
         }
     } else if (is.peek() == '/') {
