@@ -15,7 +15,7 @@ auto Test_HtmlNode_Encode(int, char**) -> int {
             throw std::runtime_error(
                 std::format("{}:{}: expected encoded node:\n"
                             "{}\n"
-                            "got:\n"
+                            "got encoded node:\n"
                             "{}",
                             __FILE__, __LINE__, expected, encoded));
     }
@@ -33,7 +33,7 @@ auto Test_HtmlNode_Encode(int, char**) -> int {
             throw std::runtime_error(
                 std::format("{}:{}: expected encoded node:\n"
                             "{}\n"
-                            "got:\n"
+                            "got encoded node:\n"
                             "{}",
                             __FILE__, __LINE__, expected, encoded));
     }
