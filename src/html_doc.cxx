@@ -50,7 +50,7 @@ auto HtmlDoc::decode(std::istream& is) -> HtmlDoc {
             "'html' first child must be an 'head' tag (got '{}' instead)",
             head.tagName());
 
-    const auto body {std::get<HtmlNode>(root.child(0))};
+    const auto body {std::get<HtmlNode>(root.child(1))};
 
     if (body.tagName() != "body")
         throw DocError(
@@ -64,7 +64,12 @@ auto HtmlDoc::decode(std::istream& is) -> HtmlDoc {
         throw DocError("unexpected trailing character(s) at position {}",
                        (int)is.tellg());
 
-    return {head, body};
+    HtmlDoc buffer {head, body};
+
+    for (const auto& [k, v] : root.props())
+        buffer.prop(k, v);
+
+    return buffer;
 }
 
 auto HtmlDoc::decode(std::string_view raw) -> HtmlDoc {
@@ -74,12 +79,34 @@ auto HtmlDoc::decode(std::string_view raw) -> HtmlDoc {
     return HtmlDoc::decode(ss);
 }
 
+auto HtmlDoc::propsSize(void) const noexcept -> std::size_t {
+    return _props.size();
+}
+
+auto HtmlDoc::prop(std::string_view name) const noexcept -> std::string {
+    if (const auto it {_props.find(std::string {name})}; it != _props.end())
+        return it->second;
+
+    return {};
+}
+auto HtmlDoc::props(void) const noexcept
+    -> std::unordered_map<std::string, std::string> {
+    return _props;
+}
+
 auto HtmlDoc::head(void) const noexcept -> HtmlNode {
     return _head;
 }
 
 auto HtmlDoc::body(void) const noexcept -> HtmlNode {
     return _body;
+}
+
+auto HtmlDoc::prop(std::string_view name, std::string_view value) noexcept
+    -> HtmlDoc& {
+    _props[std::string {name}] = std::string {value};
+
+    return *this;
 }
 
 auto HtmlDoc::head(HtmlNode head) -> void {

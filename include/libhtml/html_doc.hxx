@@ -54,8 +54,31 @@ class HtmlDoc final {
 
    public:
     // ------------------------------------------------------------------------
+    // Capacity
+    // ------------------------------------------------------------------------
+
+    /**
+     * @brief Get the properties map size
+     */
+    [[nodiscard]] auto propsSize(void) const noexcept -> std::size_t;
+
+    // ------------------------------------------------------------------------
     // Lookup
     // ------------------------------------------------------------------------
+
+    /**
+     * @brief Get the property value
+     *
+     * @param name The property name
+     */
+    [[nodiscard]] auto prop(std::string_view name) const noexcept
+        -> std::string;
+
+    /**
+     * @brief Get the properties map
+     */
+    [[nodiscard]] auto props(void) const noexcept
+        -> std::unordered_map<std::string, std::string>;
 
     /**
      * @brief Get the document head
@@ -72,6 +95,15 @@ class HtmlDoc final {
     // ------------------------------------------------------------------------
 
     /**
+     * @brief Set a property value and return self
+     *
+     * @param name The property name
+     * @param value The property value
+     */
+    auto prop(std::string_view name, std::string_view value) noexcept
+        -> HtmlDoc&;
+
+    /**
      * @brief Get the document head
      */
     auto head(HtmlNode head) -> void;
@@ -82,6 +114,7 @@ class HtmlDoc final {
     auto body(HtmlNode head) -> void;
 
    private:
+    std::unordered_map<std::string, std::string> _props {};
     HtmlNode _head {};
     HtmlNode _body {};
 };
