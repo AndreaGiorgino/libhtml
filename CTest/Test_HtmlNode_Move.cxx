@@ -75,6 +75,19 @@ auto Test_HtmlNode_Move(int, char**) -> int {
                         __FILE__, __LINE__, expected, nestedContent));
             }
         }
+
+        if (const auto expected {""}; buffer.tagName() != expected)
+            throw std::runtime_error(
+                std::format("{}:{}: expected tag name '{}' (got '{}')",
+                            __FILE__, __LINE__, expected, buffer.tagName()));
+        else if (const auto expected {0}; buffer.propsSize() != expected)
+            throw std::runtime_error(
+                std::format("{}:{}: expected {} properties (got '{}')",
+                            __FILE__, __LINE__, expected, buffer.propsSize()));
+        else if (const auto expected {0}; buffer.childrenSize() != expected)
+            throw std::runtime_error(
+                std::format("{}:{}: expected {} children (got '{}')", __FILE__,
+                            __LINE__, expected, buffer.childrenSize()));
     }
 
     {
@@ -146,6 +159,19 @@ auto Test_HtmlNode_Move(int, char**) -> int {
                         __FILE__, __LINE__, expected, nestedContent));
             }
         }
+
+        if (const auto expected {""}; buffer.tagName() != expected)
+            throw std::runtime_error(
+                std::format("{}:{}: expected tag name '{}' (got '{}')",
+                            __FILE__, __LINE__, expected, buffer.tagName()));
+        else if (const auto expected {0}; buffer.propsSize() != expected)
+            throw std::runtime_error(
+                std::format("{}:{}: expected {} properties (got '{}')",
+                            __FILE__, __LINE__, expected, buffer.propsSize()));
+        else if (const auto expected {0}; buffer.childrenSize() != expected)
+            throw std::runtime_error(
+                std::format("{}:{}: expected {} children (got '{}')", __FILE__,
+                            __LINE__, expected, buffer.childrenSize()));
     }
 
     return 0;
