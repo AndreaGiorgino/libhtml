@@ -42,6 +42,9 @@ auto HtmlDoc::decode(std::istream& is) -> HtmlDoc {
         throw DocError(
             "document root node must be an 'html' tag (got '{}' instead)",
             root.tagName());
+    else if (root.childrenSize() != 2)
+        throw DocError(
+            "document root node must contain 2 children ('head' and 'body')");
 
     const auto head {std::get<HtmlNode>(root.child(0))};
 
