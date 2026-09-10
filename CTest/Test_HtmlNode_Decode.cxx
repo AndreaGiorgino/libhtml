@@ -167,7 +167,7 @@ auto Test_HtmlNode_Decode(int, char**) -> int {
                 std::format("{}:{}: expected {} children (got '{}')", __FILE__,
                             __LINE__, expected, child.childrenSize()));
 
-        //// test attributes
+        //// test properties
         const auto props {child.props()};
 
         if (const auto name {"src"}, expected {"test.jpg"};
