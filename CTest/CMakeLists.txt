@@ -24,6 +24,8 @@ set(
     Test_HtmlDoc_Copy.cxx
     Test_HtmlDoc_Move.cxx
 
+    Test_HtmlDoc_Clear.cxx
+
     Test_HtmlDoc_Decode.cxx
     Test_HtmlDoc_Encode.cxx
 )
