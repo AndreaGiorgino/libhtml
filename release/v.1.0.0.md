@@ -2,9 +2,10 @@
 
 ## Release notes
 
-- html document decoding/encoding
-- html nodes decoding/encoding
+- HTML document decoding/encoding
+- HTML nodes decoding/encoding
 - DOM manipulation interface for properties and children
+- Build script for default builds
 
 ## ABI quick reference
 
