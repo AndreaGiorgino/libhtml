@@ -113,6 +113,13 @@ class HtmlDoc final {
      */
     auto body(HtmlNode head) -> void;
 
+    // ------------------------------------------------------------------------
+    // Print
+    // ------------------------------------------------------------------------
+
+    [[nodiscard]] auto encode(std::size_t indent = 4) const noexcept
+        -> std::string;
+
    private:
     std::unordered_map<std::string, std::string> _props {};
     HtmlNode _head {};

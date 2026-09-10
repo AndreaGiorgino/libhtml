@@ -129,3 +129,23 @@ auto HtmlDoc::body(HtmlNode body) -> void {
 
     _body = body;
 }
+
+auto HtmlDoc::encode(std::size_t indent) const noexcept -> std::string {
+    std::stringstream ss {};
+
+    ss << "<!doctype html>";
+
+    if (indent != 0)
+        ss << std::endl;
+
+    HtmlNode buffer {"head"};
+
+    for (const auto& [k, v] : _props)
+        buffer.prop(k, v);
+
+    buffer.addChild(_head).addChild(_body);
+
+    ss << buffer.encode(indent);
+
+    return ss.str();
+}
