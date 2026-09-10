@@ -1,20 +1,38 @@
-#include <libhtml/html_node.hxx>
+#include <libhtml/html_doc.hxx>
 #include <print>
+#include <sstream>
 
 auto main(int, char**) -> int {
-    static constexpr auto raw {
-        R"(<div id="container" data-active>
-            <!-- comment -->
-            <span>Content</span>
-        </div>)"};
+    std::stringstream ss {};
 
-    std::println("Parsing node:");
-    std::println("{}\n", raw);
+    ss << R"(
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valid HTML Document</title>
 
-    const auto node {HtmlNode::decode(raw)};
+    <!-- Basic metadata comment -->
 
-    std::println("Encoded:");
-    std::println("{}\n", node.encode());
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Main Heading</h1>
+    </header>
+    <main>
+      <p>Paragraph with <strong>bold</strong> and <em>italic</em> text.</p>
+      <hr />
+      <img src="test.jpg" alt="Test image" data-boolean />
+    </main>
+  </body>
+</html>
+)";
+
+    const auto doc {HtmlDoc::decode(ss)};
+
+    std::println("{}", doc.encode());
 
     return 0;
 }
