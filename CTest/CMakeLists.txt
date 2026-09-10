@@ -10,6 +10,8 @@ set(
     # HtmlNode
     Test_HtmlNode_Ctor.cxx
     Test_HtmlNode_Copy.cxx
+    Test_HtmlNode_Move.cxx
+    
     Test_HtmlNode_Decode.cxx
 )
 
