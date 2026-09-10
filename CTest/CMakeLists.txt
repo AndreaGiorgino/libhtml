@@ -6,7 +6,10 @@ cmake_minimum_required(VERSION 3.24)
 
 set(
     SOURCE_FILES
-    Test.cxx
+
+    # HtmlNode
+    Test_HtmlNode_Ctor.cxx
+    Test_HtmlNode_Decode.cxx
 )
 
 create_test_sourcelist(
