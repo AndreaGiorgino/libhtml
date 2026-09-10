@@ -1,4 +1,8 @@
+#include <format>
+#include <iostream>
+#include <libhtml/doc_error.hxx>
 #include <libhtml/html_doc.hxx>
+#include <print>
 #include <sstream>
 
 auto Test_HtmlDoc_Decode(int, char**) -> int {
@@ -75,6 +79,74 @@ auto Test_HtmlDoc_Decode(int, char**) -> int {
                 throw std::runtime_error(std::format(
                     "{}:{}: expected attribute '{}' to be '{}' (got '{}')",
                     __FILE__, __LINE__, name, expected, body.prop(name)));
+        }
+    }
+
+    {
+        // no-head
+        std::stringstream ss {};
+
+        ss << R"(
+            <!-- comment -->
+
+            <!doctype html>
+            <html lang="en-US">
+                <!-- comment -->
+
+                <div></div>
+                <body prop="value"></body>
+            </html>
+        )";
+
+        try {
+            (void)HtmlDoc::decode(ss);
+
+            std::println(std::cerr,
+                         "{}:{}: expected 'DocError' exception (got nothing)",
+                         __FILE__, __LINE__);
+            return 1;
+        } catch (const DocError&) {
+            // ok
+        } catch (...) {
+            std::println(
+                std::cerr,
+                "{}:{}: expected 'DocError' exception (got the following)",
+                __FILE__, __LINE__);
+            throw;
+        }
+    }
+
+    {
+        // no-body
+        std::stringstream ss {};
+
+        ss << R"(
+            <!-- comment -->
+
+            <!doctype html>
+            <html lang="en-US">
+                <!-- comment -->
+
+                <head prop="value"></head>
+                <div></div>
+            </html>
+        )";
+
+        try {
+            (void)HtmlDoc::decode(ss);
+
+            std::println(std::cerr,
+                         "{}:{}: expected 'DocError' exception (got nothing)",
+                         __FILE__, __LINE__);
+            return 1;
+        } catch (const DocError&) {
+            // ok
+        } catch (...) {
+            std::println(
+                std::cerr,
+                "{}:{}: expected 'DocError' exception (got the following)",
+                __FILE__, __LINE__);
+            throw;
         }
     }
 
