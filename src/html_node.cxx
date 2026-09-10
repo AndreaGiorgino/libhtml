@@ -14,7 +14,7 @@ auto HtmlNode::decode(std::istream& is) -> HtmlNode {
     utils::ignorews(is);
 
     if (is.peek() == '/') {
-        // self closing, unnamed tag
+        // void unnamed tag
         is.ignore();
         utils::throwWhenNot(is, '>');
         is.ignore();
@@ -191,6 +191,11 @@ auto HtmlNode::encode(size indent) const noexcept -> std::string {
     return _encodeRecursive(*this, indent, 0);
 }
 
+const std::array _voidElements {
+    "area",  "base", "br",   "col",   "embed",  "hr",    "img",
+    "input", "link", "meta", "param", "source", "track", "wbr",
+};
+
 auto _encodeRecursive(const HtmlNode& node, size indent, size depth) noexcept
     -> std::string {
     std::stringstream ss {};
@@ -200,6 +205,15 @@ auto _encodeRecursive(const HtmlNode& node, size indent, size depth) noexcept
 
     for (const auto& [k, v] : node._props)
         ss << k << "=\"" << v << "\" ";
+
+    if (const auto it {std::find(_voidElements.begin(), _voidElements.end(),
+                                 node._tagName)};
+        it != _voidElements.end()) {
+        // ignore children for void elements
+        ss << "/>";
+
+        return ss.str();
+    }
 
     // pop trailing space
     ss.seekp((int)ss.tellp() - 1);
