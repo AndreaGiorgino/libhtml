@@ -25,7 +25,7 @@ set(
     Test_HtmlDoc_Move.cxx
 
     Test_HtmlDoc_Decode.cxx
-    # Test_HtmlDoc_Encode.cxx
+    Test_HtmlDoc_Encode.cxx
 )
 
 create_test_sourcelist(
