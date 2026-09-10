@@ -17,6 +17,10 @@ set(
 
     Test_HtmlNode_Decode.cxx
     Test_HtmlNode_Encode.cxx
+
+    # HtmlNode
+    ## indirectly testing get/set methods
+    Test_HtmlDoc_Ctor.cxx
 )
 
 create_test_sourcelist(
